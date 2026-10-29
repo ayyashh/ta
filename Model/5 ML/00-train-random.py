@@ -1,4 +1,4 @@
-"""Chronological ML training with fold-level and summary CSV outputs."""
+"""Random-split ML training with cross-validated feature-count selection."""
 
 from pathlib import Path
 
@@ -8,7 +8,7 @@ import pandas as pd
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
 from sklearn.feature_selection import SelectKBest, f_regression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-from sklearn.model_selection import TimeSeriesSplit
+from sklearn.model_selection import KFold, train_test_split
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -20,8 +20,8 @@ except ImportError as error:
     raise ImportError("Instal xgboost untuk menjalankan model XGBoost.") from error
 
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-DATASET_NAME = "dataset_fitur_jumlah_sel.csv"
+SCRIPT_DIR = Path.cwd()
+DATASET_NAME = "dataset_fitur_jumlah_sel_dari_biomass.csv"
 KAGGLE_INPUT = Path("/kaggle/input")
 if KAGGLE_INPUT.is_dir():
     candidates = list(KAGGLE_INPUT.rglob(DATASET_NAME))
@@ -38,15 +38,16 @@ if not FILE_DATA.is_file():
     raise FileNotFoundError(f"Dataset tidak ditemukan: {FILE_DATA}")
 
 if Path("/kaggle/working").is_dir():
-    OUTPUT_DIR = Path("/kaggle/working/Hasil/Chronological")
+    OUTPUT_DIR = Path("/kaggle/working")
 else:
-    OUTPUT_DIR = SCRIPT_DIR / "Hasil" / "Chronological"
+    OUTPUT_DIR = SCRIPT_DIR / "Hasil" / "Random"
 
-IMAGE_COLUMN = "nama_file"
-TARGET_COLUMN = "Jumlah Sel (sel/mL)"
+IMAGE_COLUMN = "file_name"
+TARGET_COLUMN = "Jumlah Sel dari Biomass (sel/mL)"
 TEST_RATIO = 0.20
 N_SPLITS = 5
 SEED = 42
+FEATURE_COUNTS = (5, 10, 20, 30, 50)
 
 
 def parse_target(values: pd.Series) -> np.ndarray:
@@ -91,110 +92,120 @@ def main() -> None:
         raise ValueError("nama_file kosong atau duplikat.")
 
     target = parse_target(df[TARGET_COLUMN])
-    timestamps_text = df[IMAGE_COLUMN].str.extract(
-        r"(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})", expand=False
-    )
-    timestamps = pd.to_datetime(
-        timestamps_text, format="%Y-%m-%d_%H-%M-%S", errors="coerce"
-    )
-    if timestamps.isna().any():
-        raise ValueError("Timestamp pada sebagian nama_file tidak dikenali.")
-
-    order = np.argsort(timestamps.to_numpy(), kind="stable")
-    df = df.iloc[order].reset_index(drop=True)
+    df = df.reset_index(drop=True)
     X = df[feature_columns].to_numpy(dtype=np.float32, copy=True)
-    y = target[order]
+    y = target
     if not np.isfinite(X).all() or not np.isfinite(y).all():
         raise ValueError("Fitur atau target mengandung nilai kosong/tidak valid.")
 
     n_samples = len(y)
-    n_test = max(1, int(np.ceil(TEST_RATIO * n_samples)))
-    split_index = n_samples - n_test
-    if split_index <= N_SPLITS:
-        raise ValueError("Data train terlalu sedikit untuk TimeSeriesSplit 5-fold.")
-    train_indices = np.arange(0, split_index)
-    test_indices = np.arange(split_index, n_samples)
+    train_indices, test_indices = train_test_split(
+        np.arange(n_samples), test_size=TEST_RATIO,
+        random_state=SEED, shuffle=True,
+    )
     X_train, y_train = X[train_indices], y[train_indices]
     X_test, y_test = X[test_indices], y[test_indices]
 
-    n_selected = min(50, X.shape[1])
-    cv = TimeSeriesSplit(n_splits=N_SPLITS)
+    if len(train_indices) <= N_SPLITS:
+        raise ValueError("Data train terlalu sedikit untuk KFold 5-fold.")
+    feature_counts = sorted({min(k, X.shape[1]) for k in FEATURE_COUNTS} | {X.shape[1]})
+    cv = KFold(n_splits=N_SPLITS, shuffle=True, random_state=SEED)
     folds = list(cv.split(X_train))
-    models = {
-        "DTS": make_pipeline(
-            DecisionTreeRegressor(max_depth=5, min_samples_leaf=3, random_state=SEED),
-            n_selected,
+    model_factories = {
+        "DTS": lambda: (
+            DecisionTreeRegressor(
+                max_depth=5, min_samples_leaf=3, random_state=SEED
+            ),
+            False,
         ),
-        "Random Forest": make_pipeline(
+        "Random Forest": lambda: (
             RandomForestRegressor(
-                n_estimators=300,
-                min_samples_leaf=2,
-                max_features=0.5,
-                random_state=SEED,
-                n_jobs=-1,
+                n_estimators=300, min_samples_leaf=2, max_features=0.5,
+                random_state=SEED, n_jobs=-1,
             ),
-            n_selected,
+            False,
         ),
-        "Gradient Boosting": make_pipeline(
+        "Gradient Boosting": lambda: (
             GradientBoostingRegressor(
-                n_estimators=200, learning_rate=0.03, max_depth=2, random_state=SEED
+                n_estimators=200, learning_rate=0.03,
+                max_depth=2, random_state=SEED,
             ),
-            n_selected,
+            False,
         ),
-        "KNN": make_pipeline(
+        "KNN": lambda: (
             KNeighborsRegressor(n_neighbors=5, weights="distance", p=2),
-            n_selected,
-            scale=True,
+            True,
         ),
-        "XGBoost": make_pipeline(
+        "XGBoost": lambda: (
             XGBRegressor(
-                objective="reg:squarederror",
-                n_estimators=300,
-                learning_rate=0.03,
-                max_depth=3,
-                subsample=0.8,
-                colsample_bytree=0.8,
-                reg_lambda=1.0,
-                random_state=SEED,
-                n_jobs=-1,
+                objective="reg:squarederror", n_estimators=300,
+                learning_rate=0.03, max_depth=3, subsample=0.8,
+                colsample_bytree=0.8, reg_lambda=1.0,
+                random_state=SEED, n_jobs=-1,
             ),
-            n_selected,
+            False,
         ),
     }
 
     cv_rows = []
     summary_rows = []
+    feature_selection_rows = []
     test_rows = []
     predictions = {"nama_file": df.iloc[test_indices][IMAGE_COLUMN].to_numpy(), "actual": y_test}
     fitted_models = {}
 
-    for model_name, estimator in models.items():
-        print(f"CV chronological: {model_name}")
-        fold_scores = []
-        for fold_number, (fit_indices, validation_indices) in enumerate(folds, start=1):
-            estimator.fit(X_train[fit_indices], y_train[fit_indices])
-            fold_prediction = estimator.predict(X_train[validation_indices])
-            scores = metrics(y_train[validation_indices], fold_prediction)
-            fold_scores.append(scores)
-            cv_rows.append({"Model": model_name, "Fold": fold_number, **scores})
+    for model_name, model_factory in model_factories.items():
+        print(f"CV random + pemilihan fitur: {model_name}")
+        per_k_rows = []
+        for feature_count in feature_counts:
+            for fold_number, (fit_indices, validation_indices) in enumerate(
+                folds, start=1
+            ):
+                estimator, scale = model_factory()
+                pipeline = make_pipeline(estimator, feature_count, scale=scale)
+                pipeline.fit(X_train[fit_indices], y_train[fit_indices])
+                fold_prediction = pipeline.predict(X_train[validation_indices])
+                scores = metrics(y_train[validation_indices], fold_prediction)
+                row = {
+                    "Model": model_name,
+                    "n_features": feature_count,
+                    "Fold": fold_number,
+                    **scores,
+                }
+                cv_rows.append(row)
+                per_k_rows.append(row)
 
-        scores_frame = pd.DataFrame(fold_scores)
+        per_k_summary = (
+            pd.DataFrame(per_k_rows)
+            .groupby("n_features", as_index=False)
+            .agg(
+                MAE_mean=("MAE", "mean"),
+                MAE_std=("MAE", "std"),
+                RMSE_mean=("RMSE", "mean"),
+                RMSE_std=("RMSE", "std"),
+                R2_mean=("R2", "mean"),
+                R2_std=("R2", "std"),
+                n_folds=("Fold", "count"),
+            )
+        )
+        selected_summary = per_k_summary.sort_values(["MAE_mean", "n_features"]).iloc[0]
+        selected_count = int(selected_summary["n_features"])
         summary_rows.append({
             "Model": model_name,
-            "MAE_mean": scores_frame["MAE"].mean(),
-            "MAE_std": scores_frame["MAE"].std(ddof=1),
-            "RMSE_mean": scores_frame["RMSE"].mean(),
-            "RMSE_std": scores_frame["RMSE"].std(ddof=1),
-            "R2_mean": scores_frame["R2"].mean(),
-            "R2_std": scores_frame["R2"].std(ddof=1),
-            "n_folds": len(scores_frame),
+            "n_features": selected_count,
+            **selected_summary.drop(labels="n_features").to_dict(),
         })
+        feature_selection_rows.extend(
+            {"Model": model_name, **row.to_dict()}
+            for _, row in per_k_summary.iterrows()
+        )
 
-        # Fit final model only on the chronological train period, evaluate later period.
-        estimator.fit(X_train, y_train)
-        fitted_models[model_name] = estimator
-        train_prediction = estimator.predict(X_train)
-        test_prediction = estimator.predict(X_test)
+        estimator, scale = model_factory()
+        final_model = make_pipeline(estimator, selected_count, scale=scale)
+        final_model.fit(X_train, y_train)
+        fitted_models[model_name] = final_model
+        train_prediction = final_model.predict(X_train)
+        test_prediction = final_model.predict(X_test)
         test_rows.extend([
             {"Model": model_name, "Data": "Train", **metrics(y_train, train_prediction)},
             {"Model": model_name, "Data": "Test", **metrics(y_test, test_prediction)},
@@ -204,12 +215,32 @@ def main() -> None:
 
     cv_per_fold = pd.DataFrame(cv_rows)
     cv_summary = pd.DataFrame(summary_rows).sort_values("MAE_mean").reset_index(drop=True)
+    feature_selection_summary = pd.DataFrame(feature_selection_rows)
     train_test_metrics = pd.DataFrame(test_rows)
     best_model_name = cv_summary.iloc[0]["Model"]
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     cv_per_fold.to_csv(OUTPUT_DIR / "hasil_cv_per_fold.csv", index=False, encoding="utf-8-sig")
     cv_summary.to_csv(OUTPUT_DIR / "hasil_cv_ringkasan.csv", index=False, encoding="utf-8-sig")
+    feature_selection_summary.to_csv(
+        OUTPUT_DIR / "hasil_pemilihan_jumlah_fitur.csv", index=False, encoding="utf-8-sig"
+    )
+    selected_feature_rows = []
+    for model_name, pipeline in fitted_models.items():
+        selector = pipeline.named_steps["select"]
+        for feature, score, selected in zip(
+            feature_columns, selector.scores_, selector.get_support()
+        ):
+            selected_feature_rows.append({
+                "Model": model_name,
+                "selected_n_features": int(selector.get_support().sum()),
+                "feature": feature,
+                "f_score": score,
+                "selected": bool(selected),
+            })
+    pd.DataFrame(selected_feature_rows).to_csv(
+        OUTPUT_DIR / "fitur_terpilih_per_model.csv", index=False, encoding="utf-8-sig"
+    )
     train_test_metrics.to_csv(
         OUTPUT_DIR / "hasil_evaluasi_train_test_semua_model.csv",
         index=False,
@@ -220,7 +251,7 @@ def main() -> None:
     )
     joblib.dump(fitted_models[best_model_name], OUTPUT_DIR / "model_terbaik.joblib")
 
-    print(f"Sampel chronological: train={len(train_indices)}, test={len(test_indices)}")
+    print(f"Sampel random split: train={len(train_indices)}, test={len(test_indices)}")
     print(f"Model terbaik berdasarkan MAE CV: {best_model_name}")
     print(f"Semua CSV dan model disimpan di: {OUTPUT_DIR}")
 
