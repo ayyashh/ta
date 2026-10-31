@@ -1,0 +1,2 @@
+﻿Pendekatan,Jumlah fitur S20,"CV MAE (mean ± SD, 5-fold)",Train 80% MAE,Test 20% MAE,"CV RMSE (mean ± SD, 5-fold)",Train 80% RMSE,Test 20% RMSE,"CV R2 (mean ± SD, 5-fold)",Train 80% R2,Test 20% R2,Alpha terpilih
+LASSO,12,"1,002,524 ± 82,956","968,884","816,932","1,514,992 ± 511,520","1,558,649","1,038,571",-0.041 ± 0.143,0.043,-0.037,0.00542868

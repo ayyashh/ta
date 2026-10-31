@@ -1,0 +1,371 @@
+﻿Model,selected_n_features,total_fitur_dipilih,feature,f_score,rank,selected
+Custom CNN 29-Layer,74,74,fitur_mean_R,12.52093416995976,8,True
+Custom CNN 29-Layer,74,74,fitur_std_R,19.306061338312723,5,True
+Custom CNN 29-Layer,74,74,fitur_mean_G,7.5415185334616845,33,True
+Custom CNN 29-Layer,74,74,fitur_std_G,3.2610490758705395,51,True
+Custom CNN 29-Layer,74,74,fitur_mean_B,3.0092772640154872,53,True
+Custom CNN 29-Layer,74,74,fitur_std_B,1.9528552943500768,59,True
+Custom CNN 29-Layer,74,74,fitur_mean_luminance,8.16860168314863,28,True
+Custom CNN 29-Layer,74,74,fitur_std_luminance,5.382047693794754,40,True
+Custom CNN 29-Layer,74,74,fitur_HSV_mean_H,0.9859566138600682,65,True
+Custom CNN 29-Layer,74,74,fitur_HSV_std_H,0.13202858456346028,72,True
+Custom CNN 29-Layer,74,74,fitur_HSV_mean_S,0.267283228723026,69,True
+Custom CNN 29-Layer,74,74,fitur_HSV_std_S,6.246906116379481,37,True
+Custom CNN 29-Layer,74,74,fitur_HSV_mean_V,9.325405003587338,22,True
+Custom CNN 29-Layer,74,74,fitur_HSV_std_V,20.151842652943657,4,True
+Custom CNN 29-Layer,74,74,fitur_Lab_mean_L,8.933135084653914,26,True
+Custom CNN 29-Layer,74,74,fitur_Lab_std_L,6.716248469186335,36,True
+Custom CNN 29-Layer,74,74,fitur_Lab_mean_a,0.5877255369587474,68,True
+Custom CNN 29-Layer,74,74,fitur_Lab_std_a,21.060163990495194,3,True
+Custom CNN 29-Layer,74,74,fitur_Lab_mean_b,10.096834480670521,16,True
+Custom CNN 29-Layer,74,74,fitur_Lab_std_b,27.981720641440948,1,True
+Custom CNN 29-Layer,74,74,fitur_peak_R,11.123827410438503,11,True
+Custom CNN 29-Layer,74,74,fitur_peak_G,10.952036526664719,12,True
+Custom CNN 29-Layer,74,74,fitur_peak_B,4.699933599388614,45,True
+Custom CNN 29-Layer,74,74,fitur_peak_H,2.678599233267153,55,True
+Custom CNN 29-Layer,74,74,fitur_peak_S,0.0005169996759785858,74,True
+Custom CNN 29-Layer,74,74,fitur_peak_V,9.007293352444043,24,True
+Custom CNN 29-Layer,74,74,fitur_peak_L,9.81338754353311,19,True
+Custom CNN 29-Layer,74,74,fitur_peak_a,0.1736964008775641,71,True
+Custom CNN 29-Layer,74,74,fitur_peak_b,6.003375341876785,38,True
+Custom CNN 29-Layer,74,74,fitur_ratio_R_over_G,10.643372567850399,13,True
+Custom CNN 29-Layer,74,74,fitur_ratio_R_over_B,8.980936474880135,25,True
+Custom CNN 29-Layer,74,74,fitur_ratio_G_over_B,2.453085400569817,57,True
+Custom CNN 29-Layer,74,74,fitur_sum_R_plus_G,10.030800440817679,17,True
+Custom CNN 29-Layer,74,74,fitur_sum_R_plus_B,7.051831603369446,35,True
+Custom CNN 29-Layer,74,74,fitur_sum_G_plus_B,5.047247847977248,43,True
+Custom CNN 29-Layer,74,74,fitur_diff_R_minus_G,3.85502352030228,50,True
+Custom CNN 29-Layer,74,74,fitur_diff_R_minus_B,9.91614972766465,18,True
+Custom CNN 29-Layer,74,74,fitur_diff_G_minus_B,10.198184541276738,15,True
+Custom CNN 29-Layer,74,74,fitur_product_RxG,9.222194975485184,23,True
+Custom CNN 29-Layer,74,74,fitur_product_RxB,4.555215944716417,46,True
+Custom CNN 29-Layer,74,74,fitur_normalized_R_mean,4.899088254758459,44,True
+Custom CNN 29-Layer,74,74,fitur_normalized_G_mean,0.8485010637657244,67,True
+Custom CNN 29-Layer,74,74,fitur_normalized_B_mean,4.4155691092999225,47,True
+Custom CNN 29-Layer,74,74,fitur_log_R_mean,9.621420850829258,20,True
+Custom CNN 29-Layer,74,74,fitur_log_G_mean,5.088052625871488,42,True
+Custom CNN 29-Layer,74,74,fitur_log_B_mean,2.6432154875999108,56,True
+Custom CNN 29-Layer,74,74,fitur_entropy_R,16.83892051577427,6,True
+Custom CNN 29-Layer,74,74,fitur_entropy_G,1.8028717434742108,61,True
+Custom CNN 29-Layer,74,74,fitur_entropy_B,1.0555640296873907,64,True
+Custom CNN 29-Layer,74,74,fitur_entropy_RxG,8.556845554330922,27,True
+Custom CNN 29-Layer,74,74,fitur_entropy_RxB,7.925111914666159,30,True
+Custom CNN 29-Layer,74,74,fitur_entropy_GxB,1.8445566478619275,60,True
+Custom CNN 29-Layer,74,74,fitur_entropy_R_squared,21.31990654525632,2,True
+Custom CNN 29-Layer,74,74,fitur_entropy_G_squared,2.07978935944622,58,True
+Custom CNN 29-Layer,74,74,fitur_entropy_B_squared,1.6465601245020407,62,True
+Custom CNN 29-Layer,74,74,fitur_R_FT,12.053004976920375,10,True
+Custom CNN 29-Layer,74,74,fitur_G_FT,8.02754374572634,29,True
+Custom CNN 29-Layer,74,74,fitur_B_FT,1.5158471175769515,63,True
+Custom CNN 29-Layer,74,74,fitur_R_CI_lower,12.5014168143287,9,True
+Custom CNN 29-Layer,74,74,fitur_R_CI_upper,12.5403803209446,7,True
+Custom CNN 29-Layer,74,74,fitur_G_CI_lower,7.545490230436356,32,True
+Custom CNN 29-Layer,74,74,fitur_G_CI_upper,7.537543673418044,34,True
+Custom CNN 29-Layer,74,74,fitur_B_CI_lower,3.007780029793304,54,True
+Custom CNN 29-Layer,74,74,fitur_B_CI_upper,3.010763301688001,52,True
+Custom CNN 29-Layer,74,74,fitur_GLCM_contrast_mean,5.378795238998918,41,True
+Custom CNN 29-Layer,74,74,fitur_GLCM_contrast_std,0.24927919740372378,70,True
+Custom CNN 29-Layer,74,74,fitur_GLCM_dissimilarity_mean,9.566985166667525,21,True
+Custom CNN 29-Layer,74,74,fitur_GLCM_dissimilarity_std,4.31291368613111,48,True
+Custom CNN 29-Layer,74,74,fitur_GLCM_homogeneity_mean,10.26285105117427,14,True
+Custom CNN 29-Layer,74,74,fitur_GLCM_homogeneity_std,5.743320494280762,39,True
+Custom CNN 29-Layer,74,74,fitur_GLCM_energy_mean,7.816461904431975,31,True
+Custom CNN 29-Layer,74,74,fitur_GLCM_energy_std,4.116060597628036,49,True
+Custom CNN 29-Layer,74,74,fitur_GLCM_correlation_mean,0.020501285195647177,73,True
+Custom CNN 29-Layer,74,74,fitur_GLCM_correlation_std,0.8501342327535254,66,True
+VGG16,50,50,fitur_mean_R,12.52093416995976,8,True
+VGG16,50,50,fitur_std_R,19.306061338312723,5,True
+VGG16,50,50,fitur_mean_G,7.5415185334616845,33,True
+VGG16,50,50,fitur_std_G,3.2610490758705395,51,False
+VGG16,50,50,fitur_mean_B,3.0092772640154872,53,False
+VGG16,50,50,fitur_std_B,1.9528552943500768,59,False
+VGG16,50,50,fitur_mean_luminance,8.16860168314863,28,True
+VGG16,50,50,fitur_std_luminance,5.382047693794754,40,True
+VGG16,50,50,fitur_HSV_mean_H,0.9859566138600682,65,False
+VGG16,50,50,fitur_HSV_std_H,0.13202858456346028,72,False
+VGG16,50,50,fitur_HSV_mean_S,0.267283228723026,69,False
+VGG16,50,50,fitur_HSV_std_S,6.246906116379481,37,True
+VGG16,50,50,fitur_HSV_mean_V,9.325405003587338,22,True
+VGG16,50,50,fitur_HSV_std_V,20.151842652943657,4,True
+VGG16,50,50,fitur_Lab_mean_L,8.933135084653914,26,True
+VGG16,50,50,fitur_Lab_std_L,6.716248469186335,36,True
+VGG16,50,50,fitur_Lab_mean_a,0.5877255369587474,68,False
+VGG16,50,50,fitur_Lab_std_a,21.060163990495194,3,True
+VGG16,50,50,fitur_Lab_mean_b,10.096834480670521,16,True
+VGG16,50,50,fitur_Lab_std_b,27.981720641440948,1,True
+VGG16,50,50,fitur_peak_R,11.123827410438503,11,True
+VGG16,50,50,fitur_peak_G,10.952036526664719,12,True
+VGG16,50,50,fitur_peak_B,4.699933599388614,45,True
+VGG16,50,50,fitur_peak_H,2.678599233267153,55,False
+VGG16,50,50,fitur_peak_S,0.0005169996759785858,74,False
+VGG16,50,50,fitur_peak_V,9.007293352444043,24,True
+VGG16,50,50,fitur_peak_L,9.81338754353311,19,True
+VGG16,50,50,fitur_peak_a,0.1736964008775641,71,False
+VGG16,50,50,fitur_peak_b,6.003375341876785,38,True
+VGG16,50,50,fitur_ratio_R_over_G,10.643372567850399,13,True
+VGG16,50,50,fitur_ratio_R_over_B,8.980936474880135,25,True
+VGG16,50,50,fitur_ratio_G_over_B,2.453085400569817,57,False
+VGG16,50,50,fitur_sum_R_plus_G,10.030800440817679,17,True
+VGG16,50,50,fitur_sum_R_plus_B,7.051831603369446,35,True
+VGG16,50,50,fitur_sum_G_plus_B,5.047247847977248,43,True
+VGG16,50,50,fitur_diff_R_minus_G,3.85502352030228,50,True
+VGG16,50,50,fitur_diff_R_minus_B,9.91614972766465,18,True
+VGG16,50,50,fitur_diff_G_minus_B,10.198184541276738,15,True
+VGG16,50,50,fitur_product_RxG,9.222194975485184,23,True
+VGG16,50,50,fitur_product_RxB,4.555215944716417,46,True
+VGG16,50,50,fitur_normalized_R_mean,4.899088254758459,44,True
+VGG16,50,50,fitur_normalized_G_mean,0.8485010637657244,67,False
+VGG16,50,50,fitur_normalized_B_mean,4.4155691092999225,47,True
+VGG16,50,50,fitur_log_R_mean,9.621420850829258,20,True
+VGG16,50,50,fitur_log_G_mean,5.088052625871488,42,True
+VGG16,50,50,fitur_log_B_mean,2.6432154875999108,56,False
+VGG16,50,50,fitur_entropy_R,16.83892051577427,6,True
+VGG16,50,50,fitur_entropy_G,1.8028717434742108,61,False
+VGG16,50,50,fitur_entropy_B,1.0555640296873907,64,False
+VGG16,50,50,fitur_entropy_RxG,8.556845554330922,27,True
+VGG16,50,50,fitur_entropy_RxB,7.925111914666159,30,True
+VGG16,50,50,fitur_entropy_GxB,1.8445566478619275,60,False
+VGG16,50,50,fitur_entropy_R_squared,21.31990654525632,2,True
+VGG16,50,50,fitur_entropy_G_squared,2.07978935944622,58,False
+VGG16,50,50,fitur_entropy_B_squared,1.6465601245020407,62,False
+VGG16,50,50,fitur_R_FT,12.053004976920375,10,True
+VGG16,50,50,fitur_G_FT,8.02754374572634,29,True
+VGG16,50,50,fitur_B_FT,1.5158471175769515,63,False
+VGG16,50,50,fitur_R_CI_lower,12.5014168143287,9,True
+VGG16,50,50,fitur_R_CI_upper,12.5403803209446,7,True
+VGG16,50,50,fitur_G_CI_lower,7.545490230436356,32,True
+VGG16,50,50,fitur_G_CI_upper,7.537543673418044,34,True
+VGG16,50,50,fitur_B_CI_lower,3.007780029793304,54,False
+VGG16,50,50,fitur_B_CI_upper,3.010763301688001,52,False
+VGG16,50,50,fitur_GLCM_contrast_mean,5.378795238998918,41,True
+VGG16,50,50,fitur_GLCM_contrast_std,0.24927919740372378,70,False
+VGG16,50,50,fitur_GLCM_dissimilarity_mean,9.566985166667525,21,True
+VGG16,50,50,fitur_GLCM_dissimilarity_std,4.31291368613111,48,True
+VGG16,50,50,fitur_GLCM_homogeneity_mean,10.26285105117427,14,True
+VGG16,50,50,fitur_GLCM_homogeneity_std,5.743320494280762,39,True
+VGG16,50,50,fitur_GLCM_energy_mean,7.816461904431975,31,True
+VGG16,50,50,fitur_GLCM_energy_std,4.116060597628036,49,True
+VGG16,50,50,fitur_GLCM_correlation_mean,0.020501285195647177,73,False
+VGG16,50,50,fitur_GLCM_correlation_std,0.8501342327535254,66,False
+EfficientNet-B0,30,30,fitur_mean_R,12.52093416995976,8,True
+EfficientNet-B0,30,30,fitur_std_R,19.306061338312723,5,True
+EfficientNet-B0,30,30,fitur_mean_G,7.5415185334616845,33,False
+EfficientNet-B0,30,30,fitur_std_G,3.2610490758705395,51,False
+EfficientNet-B0,30,30,fitur_mean_B,3.0092772640154872,53,False
+EfficientNet-B0,30,30,fitur_std_B,1.9528552943500768,59,False
+EfficientNet-B0,30,30,fitur_mean_luminance,8.16860168314863,28,True
+EfficientNet-B0,30,30,fitur_std_luminance,5.382047693794754,40,False
+EfficientNet-B0,30,30,fitur_HSV_mean_H,0.9859566138600682,65,False
+EfficientNet-B0,30,30,fitur_HSV_std_H,0.13202858456346028,72,False
+EfficientNet-B0,30,30,fitur_HSV_mean_S,0.267283228723026,69,False
+EfficientNet-B0,30,30,fitur_HSV_std_S,6.246906116379481,37,False
+EfficientNet-B0,30,30,fitur_HSV_mean_V,9.325405003587338,22,True
+EfficientNet-B0,30,30,fitur_HSV_std_V,20.151842652943657,4,True
+EfficientNet-B0,30,30,fitur_Lab_mean_L,8.933135084653914,26,True
+EfficientNet-B0,30,30,fitur_Lab_std_L,6.716248469186335,36,False
+EfficientNet-B0,30,30,fitur_Lab_mean_a,0.5877255369587474,68,False
+EfficientNet-B0,30,30,fitur_Lab_std_a,21.060163990495194,3,True
+EfficientNet-B0,30,30,fitur_Lab_mean_b,10.096834480670521,16,True
+EfficientNet-B0,30,30,fitur_Lab_std_b,27.981720641440948,1,True
+EfficientNet-B0,30,30,fitur_peak_R,11.123827410438503,11,True
+EfficientNet-B0,30,30,fitur_peak_G,10.952036526664719,12,True
+EfficientNet-B0,30,30,fitur_peak_B,4.699933599388614,45,False
+EfficientNet-B0,30,30,fitur_peak_H,2.678599233267153,55,False
+EfficientNet-B0,30,30,fitur_peak_S,0.0005169996759785858,74,False
+EfficientNet-B0,30,30,fitur_peak_V,9.007293352444043,24,True
+EfficientNet-B0,30,30,fitur_peak_L,9.81338754353311,19,True
+EfficientNet-B0,30,30,fitur_peak_a,0.1736964008775641,71,False
+EfficientNet-B0,30,30,fitur_peak_b,6.003375341876785,38,False
+EfficientNet-B0,30,30,fitur_ratio_R_over_G,10.643372567850399,13,True
+EfficientNet-B0,30,30,fitur_ratio_R_over_B,8.980936474880135,25,True
+EfficientNet-B0,30,30,fitur_ratio_G_over_B,2.453085400569817,57,False
+EfficientNet-B0,30,30,fitur_sum_R_plus_G,10.030800440817679,17,True
+EfficientNet-B0,30,30,fitur_sum_R_plus_B,7.051831603369446,35,False
+EfficientNet-B0,30,30,fitur_sum_G_plus_B,5.047247847977248,43,False
+EfficientNet-B0,30,30,fitur_diff_R_minus_G,3.85502352030228,50,False
+EfficientNet-B0,30,30,fitur_diff_R_minus_B,9.91614972766465,18,True
+EfficientNet-B0,30,30,fitur_diff_G_minus_B,10.198184541276738,15,True
+EfficientNet-B0,30,30,fitur_product_RxG,9.222194975485184,23,True
+EfficientNet-B0,30,30,fitur_product_RxB,4.555215944716417,46,False
+EfficientNet-B0,30,30,fitur_normalized_R_mean,4.899088254758459,44,False
+EfficientNet-B0,30,30,fitur_normalized_G_mean,0.8485010637657244,67,False
+EfficientNet-B0,30,30,fitur_normalized_B_mean,4.4155691092999225,47,False
+EfficientNet-B0,30,30,fitur_log_R_mean,9.621420850829258,20,True
+EfficientNet-B0,30,30,fitur_log_G_mean,5.088052625871488,42,False
+EfficientNet-B0,30,30,fitur_log_B_mean,2.6432154875999108,56,False
+EfficientNet-B0,30,30,fitur_entropy_R,16.83892051577427,6,True
+EfficientNet-B0,30,30,fitur_entropy_G,1.8028717434742108,61,False
+EfficientNet-B0,30,30,fitur_entropy_B,1.0555640296873907,64,False
+EfficientNet-B0,30,30,fitur_entropy_RxG,8.556845554330922,27,True
+EfficientNet-B0,30,30,fitur_entropy_RxB,7.925111914666159,30,True
+EfficientNet-B0,30,30,fitur_entropy_GxB,1.8445566478619275,60,False
+EfficientNet-B0,30,30,fitur_entropy_R_squared,21.31990654525632,2,True
+EfficientNet-B0,30,30,fitur_entropy_G_squared,2.07978935944622,58,False
+EfficientNet-B0,30,30,fitur_entropy_B_squared,1.6465601245020407,62,False
+EfficientNet-B0,30,30,fitur_R_FT,12.053004976920375,10,True
+EfficientNet-B0,30,30,fitur_G_FT,8.02754374572634,29,True
+EfficientNet-B0,30,30,fitur_B_FT,1.5158471175769515,63,False
+EfficientNet-B0,30,30,fitur_R_CI_lower,12.5014168143287,9,True
+EfficientNet-B0,30,30,fitur_R_CI_upper,12.5403803209446,7,True
+EfficientNet-B0,30,30,fitur_G_CI_lower,7.545490230436356,32,False
+EfficientNet-B0,30,30,fitur_G_CI_upper,7.537543673418044,34,False
+EfficientNet-B0,30,30,fitur_B_CI_lower,3.007780029793304,54,False
+EfficientNet-B0,30,30,fitur_B_CI_upper,3.010763301688001,52,False
+EfficientNet-B0,30,30,fitur_GLCM_contrast_mean,5.378795238998918,41,False
+EfficientNet-B0,30,30,fitur_GLCM_contrast_std,0.24927919740372378,70,False
+EfficientNet-B0,30,30,fitur_GLCM_dissimilarity_mean,9.566985166667525,21,True
+EfficientNet-B0,30,30,fitur_GLCM_dissimilarity_std,4.31291368613111,48,False
+EfficientNet-B0,30,30,fitur_GLCM_homogeneity_mean,10.26285105117427,14,True
+EfficientNet-B0,30,30,fitur_GLCM_homogeneity_std,5.743320494280762,39,False
+EfficientNet-B0,30,30,fitur_GLCM_energy_mean,7.816461904431975,31,False
+EfficientNet-B0,30,30,fitur_GLCM_energy_std,4.116060597628036,49,False
+EfficientNet-B0,30,30,fitur_GLCM_correlation_mean,0.020501285195647177,73,False
+EfficientNet-B0,30,30,fitur_GLCM_correlation_std,0.8501342327535254,66,False
+Multilayer ANN,74,74,fitur_mean_R,12.52093416995976,8,True
+Multilayer ANN,74,74,fitur_std_R,19.306061338312723,5,True
+Multilayer ANN,74,74,fitur_mean_G,7.5415185334616845,33,True
+Multilayer ANN,74,74,fitur_std_G,3.2610490758705395,51,True
+Multilayer ANN,74,74,fitur_mean_B,3.0092772640154872,53,True
+Multilayer ANN,74,74,fitur_std_B,1.9528552943500768,59,True
+Multilayer ANN,74,74,fitur_mean_luminance,8.16860168314863,28,True
+Multilayer ANN,74,74,fitur_std_luminance,5.382047693794754,40,True
+Multilayer ANN,74,74,fitur_HSV_mean_H,0.9859566138600682,65,True
+Multilayer ANN,74,74,fitur_HSV_std_H,0.13202858456346028,72,True
+Multilayer ANN,74,74,fitur_HSV_mean_S,0.267283228723026,69,True
+Multilayer ANN,74,74,fitur_HSV_std_S,6.246906116379481,37,True
+Multilayer ANN,74,74,fitur_HSV_mean_V,9.325405003587338,22,True
+Multilayer ANN,74,74,fitur_HSV_std_V,20.151842652943657,4,True
+Multilayer ANN,74,74,fitur_Lab_mean_L,8.933135084653914,26,True
+Multilayer ANN,74,74,fitur_Lab_std_L,6.716248469186335,36,True
+Multilayer ANN,74,74,fitur_Lab_mean_a,0.5877255369587474,68,True
+Multilayer ANN,74,74,fitur_Lab_std_a,21.060163990495194,3,True
+Multilayer ANN,74,74,fitur_Lab_mean_b,10.096834480670521,16,True
+Multilayer ANN,74,74,fitur_Lab_std_b,27.981720641440948,1,True
+Multilayer ANN,74,74,fitur_peak_R,11.123827410438503,11,True
+Multilayer ANN,74,74,fitur_peak_G,10.952036526664719,12,True
+Multilayer ANN,74,74,fitur_peak_B,4.699933599388614,45,True
+Multilayer ANN,74,74,fitur_peak_H,2.678599233267153,55,True
+Multilayer ANN,74,74,fitur_peak_S,0.0005169996759785858,74,True
+Multilayer ANN,74,74,fitur_peak_V,9.007293352444043,24,True
+Multilayer ANN,74,74,fitur_peak_L,9.81338754353311,19,True
+Multilayer ANN,74,74,fitur_peak_a,0.1736964008775641,71,True
+Multilayer ANN,74,74,fitur_peak_b,6.003375341876785,38,True
+Multilayer ANN,74,74,fitur_ratio_R_over_G,10.643372567850399,13,True
+Multilayer ANN,74,74,fitur_ratio_R_over_B,8.980936474880135,25,True
+Multilayer ANN,74,74,fitur_ratio_G_over_B,2.453085400569817,57,True
+Multilayer ANN,74,74,fitur_sum_R_plus_G,10.030800440817679,17,True
+Multilayer ANN,74,74,fitur_sum_R_plus_B,7.051831603369446,35,True
+Multilayer ANN,74,74,fitur_sum_G_plus_B,5.047247847977248,43,True
+Multilayer ANN,74,74,fitur_diff_R_minus_G,3.85502352030228,50,True
+Multilayer ANN,74,74,fitur_diff_R_minus_B,9.91614972766465,18,True
+Multilayer ANN,74,74,fitur_diff_G_minus_B,10.198184541276738,15,True
+Multilayer ANN,74,74,fitur_product_RxG,9.222194975485184,23,True
+Multilayer ANN,74,74,fitur_product_RxB,4.555215944716417,46,True
+Multilayer ANN,74,74,fitur_normalized_R_mean,4.899088254758459,44,True
+Multilayer ANN,74,74,fitur_normalized_G_mean,0.8485010637657244,67,True
+Multilayer ANN,74,74,fitur_normalized_B_mean,4.4155691092999225,47,True
+Multilayer ANN,74,74,fitur_log_R_mean,9.621420850829258,20,True
+Multilayer ANN,74,74,fitur_log_G_mean,5.088052625871488,42,True
+Multilayer ANN,74,74,fitur_log_B_mean,2.6432154875999108,56,True
+Multilayer ANN,74,74,fitur_entropy_R,16.83892051577427,6,True
+Multilayer ANN,74,74,fitur_entropy_G,1.8028717434742108,61,True
+Multilayer ANN,74,74,fitur_entropy_B,1.0555640296873907,64,True
+Multilayer ANN,74,74,fitur_entropy_RxG,8.556845554330922,27,True
+Multilayer ANN,74,74,fitur_entropy_RxB,7.925111914666159,30,True
+Multilayer ANN,74,74,fitur_entropy_GxB,1.8445566478619275,60,True
+Multilayer ANN,74,74,fitur_entropy_R_squared,21.31990654525632,2,True
+Multilayer ANN,74,74,fitur_entropy_G_squared,2.07978935944622,58,True
+Multilayer ANN,74,74,fitur_entropy_B_squared,1.6465601245020407,62,True
+Multilayer ANN,74,74,fitur_R_FT,12.053004976920375,10,True
+Multilayer ANN,74,74,fitur_G_FT,8.02754374572634,29,True
+Multilayer ANN,74,74,fitur_B_FT,1.5158471175769515,63,True
+Multilayer ANN,74,74,fitur_R_CI_lower,12.5014168143287,9,True
+Multilayer ANN,74,74,fitur_R_CI_upper,12.5403803209446,7,True
+Multilayer ANN,74,74,fitur_G_CI_lower,7.545490230436356,32,True
+Multilayer ANN,74,74,fitur_G_CI_upper,7.537543673418044,34,True
+Multilayer ANN,74,74,fitur_B_CI_lower,3.007780029793304,54,True
+Multilayer ANN,74,74,fitur_B_CI_upper,3.010763301688001,52,True
+Multilayer ANN,74,74,fitur_GLCM_contrast_mean,5.378795238998918,41,True
+Multilayer ANN,74,74,fitur_GLCM_contrast_std,0.24927919740372378,70,True
+Multilayer ANN,74,74,fitur_GLCM_dissimilarity_mean,9.566985166667525,21,True
+Multilayer ANN,74,74,fitur_GLCM_dissimilarity_std,4.31291368613111,48,True
+Multilayer ANN,74,74,fitur_GLCM_homogeneity_mean,10.26285105117427,14,True
+Multilayer ANN,74,74,fitur_GLCM_homogeneity_std,5.743320494280762,39,True
+Multilayer ANN,74,74,fitur_GLCM_energy_mean,7.816461904431975,31,True
+Multilayer ANN,74,74,fitur_GLCM_energy_std,4.116060597628036,49,True
+Multilayer ANN,74,74,fitur_GLCM_correlation_mean,0.020501285195647177,73,True
+Multilayer ANN,74,74,fitur_GLCM_correlation_std,0.8501342327535254,66,True
+ResNeXt50 32x4d,30,30,fitur_mean_R,12.52093416995976,8,True
+ResNeXt50 32x4d,30,30,fitur_std_R,19.306061338312723,5,True
+ResNeXt50 32x4d,30,30,fitur_mean_G,7.5415185334616845,33,False
+ResNeXt50 32x4d,30,30,fitur_std_G,3.2610490758705395,51,False
+ResNeXt50 32x4d,30,30,fitur_mean_B,3.0092772640154872,53,False
+ResNeXt50 32x4d,30,30,fitur_std_B,1.9528552943500768,59,False
+ResNeXt50 32x4d,30,30,fitur_mean_luminance,8.16860168314863,28,True
+ResNeXt50 32x4d,30,30,fitur_std_luminance,5.382047693794754,40,False
+ResNeXt50 32x4d,30,30,fitur_HSV_mean_H,0.9859566138600682,65,False
+ResNeXt50 32x4d,30,30,fitur_HSV_std_H,0.13202858456346028,72,False
+ResNeXt50 32x4d,30,30,fitur_HSV_mean_S,0.267283228723026,69,False
+ResNeXt50 32x4d,30,30,fitur_HSV_std_S,6.246906116379481,37,False
+ResNeXt50 32x4d,30,30,fitur_HSV_mean_V,9.325405003587338,22,True
+ResNeXt50 32x4d,30,30,fitur_HSV_std_V,20.151842652943657,4,True
+ResNeXt50 32x4d,30,30,fitur_Lab_mean_L,8.933135084653914,26,True
+ResNeXt50 32x4d,30,30,fitur_Lab_std_L,6.716248469186335,36,False
+ResNeXt50 32x4d,30,30,fitur_Lab_mean_a,0.5877255369587474,68,False
+ResNeXt50 32x4d,30,30,fitur_Lab_std_a,21.060163990495194,3,True
+ResNeXt50 32x4d,30,30,fitur_Lab_mean_b,10.096834480670521,16,True
+ResNeXt50 32x4d,30,30,fitur_Lab_std_b,27.981720641440948,1,True
+ResNeXt50 32x4d,30,30,fitur_peak_R,11.123827410438503,11,True
+ResNeXt50 32x4d,30,30,fitur_peak_G,10.952036526664719,12,True
+ResNeXt50 32x4d,30,30,fitur_peak_B,4.699933599388614,45,False
+ResNeXt50 32x4d,30,30,fitur_peak_H,2.678599233267153,55,False
+ResNeXt50 32x4d,30,30,fitur_peak_S,0.0005169996759785858,74,False
+ResNeXt50 32x4d,30,30,fitur_peak_V,9.007293352444043,24,True
+ResNeXt50 32x4d,30,30,fitur_peak_L,9.81338754353311,19,True
+ResNeXt50 32x4d,30,30,fitur_peak_a,0.1736964008775641,71,False
+ResNeXt50 32x4d,30,30,fitur_peak_b,6.003375341876785,38,False
+ResNeXt50 32x4d,30,30,fitur_ratio_R_over_G,10.643372567850399,13,True
+ResNeXt50 32x4d,30,30,fitur_ratio_R_over_B,8.980936474880135,25,True
+ResNeXt50 32x4d,30,30,fitur_ratio_G_over_B,2.453085400569817,57,False
+ResNeXt50 32x4d,30,30,fitur_sum_R_plus_G,10.030800440817679,17,True
+ResNeXt50 32x4d,30,30,fitur_sum_R_plus_B,7.051831603369446,35,False
+ResNeXt50 32x4d,30,30,fitur_sum_G_plus_B,5.047247847977248,43,False
+ResNeXt50 32x4d,30,30,fitur_diff_R_minus_G,3.85502352030228,50,False
+ResNeXt50 32x4d,30,30,fitur_diff_R_minus_B,9.91614972766465,18,True
+ResNeXt50 32x4d,30,30,fitur_diff_G_minus_B,10.198184541276738,15,True
+ResNeXt50 32x4d,30,30,fitur_product_RxG,9.222194975485184,23,True
+ResNeXt50 32x4d,30,30,fitur_product_RxB,4.555215944716417,46,False
+ResNeXt50 32x4d,30,30,fitur_normalized_R_mean,4.899088254758459,44,False
+ResNeXt50 32x4d,30,30,fitur_normalized_G_mean,0.8485010637657244,67,False
+ResNeXt50 32x4d,30,30,fitur_normalized_B_mean,4.4155691092999225,47,False
+ResNeXt50 32x4d,30,30,fitur_log_R_mean,9.621420850829258,20,True
+ResNeXt50 32x4d,30,30,fitur_log_G_mean,5.088052625871488,42,False
+ResNeXt50 32x4d,30,30,fitur_log_B_mean,2.6432154875999108,56,False
+ResNeXt50 32x4d,30,30,fitur_entropy_R,16.83892051577427,6,True
+ResNeXt50 32x4d,30,30,fitur_entropy_G,1.8028717434742108,61,False
+ResNeXt50 32x4d,30,30,fitur_entropy_B,1.0555640296873907,64,False
+ResNeXt50 32x4d,30,30,fitur_entropy_RxG,8.556845554330922,27,True
+ResNeXt50 32x4d,30,30,fitur_entropy_RxB,7.925111914666159,30,True
+ResNeXt50 32x4d,30,30,fitur_entropy_GxB,1.8445566478619275,60,False
+ResNeXt50 32x4d,30,30,fitur_entropy_R_squared,21.31990654525632,2,True
+ResNeXt50 32x4d,30,30,fitur_entropy_G_squared,2.07978935944622,58,False
+ResNeXt50 32x4d,30,30,fitur_entropy_B_squared,1.6465601245020407,62,False
+ResNeXt50 32x4d,30,30,fitur_R_FT,12.053004976920375,10,True
+ResNeXt50 32x4d,30,30,fitur_G_FT,8.02754374572634,29,True
+ResNeXt50 32x4d,30,30,fitur_B_FT,1.5158471175769515,63,False
+ResNeXt50 32x4d,30,30,fitur_R_CI_lower,12.5014168143287,9,True
+ResNeXt50 32x4d,30,30,fitur_R_CI_upper,12.5403803209446,7,True
+ResNeXt50 32x4d,30,30,fitur_G_CI_lower,7.545490230436356,32,False
+ResNeXt50 32x4d,30,30,fitur_G_CI_upper,7.537543673418044,34,False
+ResNeXt50 32x4d,30,30,fitur_B_CI_lower,3.007780029793304,54,False
+ResNeXt50 32x4d,30,30,fitur_B_CI_upper,3.010763301688001,52,False
+ResNeXt50 32x4d,30,30,fitur_GLCM_contrast_mean,5.378795238998918,41,False
+ResNeXt50 32x4d,30,30,fitur_GLCM_contrast_std,0.24927919740372378,70,False
+ResNeXt50 32x4d,30,30,fitur_GLCM_dissimilarity_mean,9.566985166667525,21,True
+ResNeXt50 32x4d,30,30,fitur_GLCM_dissimilarity_std,4.31291368613111,48,False
+ResNeXt50 32x4d,30,30,fitur_GLCM_homogeneity_mean,10.26285105117427,14,True
+ResNeXt50 32x4d,30,30,fitur_GLCM_homogeneity_std,5.743320494280762,39,False
+ResNeXt50 32x4d,30,30,fitur_GLCM_energy_mean,7.816461904431975,31,False
+ResNeXt50 32x4d,30,30,fitur_GLCM_energy_std,4.116060597628036,49,False
+ResNeXt50 32x4d,30,30,fitur_GLCM_correlation_mean,0.020501285195647177,73,False
+ResNeXt50 32x4d,30,30,fitur_GLCM_correlation_std,0.8501342327535254,66,False

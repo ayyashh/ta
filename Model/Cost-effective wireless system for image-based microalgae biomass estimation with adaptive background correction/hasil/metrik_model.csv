@@ -1,0 +1,2 @@
+﻿cv_n_splits,cv_MAE_mean,cv_MAE_std,cv_RMSE_mean,cv_RMSE_std,cv_R2_mean,cv_R2_std,train_MAE,train_RMSE,train_R2,test_MAE,test_RMSE,test_R2,n_samples,n_train,n_test,target,input_features
+5,152802114.86335295,41175370.5521902,210444815.54875296,56225632.40404978,-4.482739018258785,4.717990842573375,74769238.901297,119162261.3912622,0.3584643538628989,138762901.24822417,162877805.14293358,-2.870560557330131,101,80,21,Jumlah Sel (sel/mL),"R_mean, G_mean, B_mean, R_std, G_std, B_std"

@@ -1,6 +1,5 @@
 Attachment
 Dataset
-*csv
 *pth
 *npy
 Data Kultivasi Mikroalga K1-16
@@ -8,3 +7,9 @@ Model/Analysis of Microalgal Density Estimation by Using LASSO and Image Texture
 Model/Convolutional neural network regression for low-cost microalgal density estimation/CNN_Moving_Window
 *.joblib
 *.pth
+
+# Fitur
+Model\Analysis of Microalgal Density Estimation by Using LASSO and Image Texture Features\fitur_skenario_S20.csv
+Model\Analysis of Microalgal Density Estimation by Using LASSO and Image Texture Features\fitur_tekstur_lengkap.csv
+Model\Cost-effective wireless system for image-based microalgae biomass estimation with adaptive background correction\fitur_rgb_sampel.csv
+Model\Real-Time Algal Monitoring Using Novel Machine Learning Approaches\fitur_histogram_rgb.csv

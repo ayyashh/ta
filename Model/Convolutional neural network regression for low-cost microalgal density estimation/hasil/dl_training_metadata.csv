@@ -1,0 +1,2 @@
+﻿target_scale_divisor,window_size,stride,seed,n_splits,train_source_count,test_source_count,train_source_ratio,test_source_ratio,final_epochs,epochs_per_run,learning_rate,loss_name,device
+1000000.0,32,20,42,5,80,21,0.7920792079207921,0.2079207920792079,15,15,0.0001,mse,/GPU:0
