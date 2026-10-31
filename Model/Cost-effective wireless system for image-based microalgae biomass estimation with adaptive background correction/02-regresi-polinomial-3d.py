@@ -178,43 +178,25 @@ def main() -> None:
 
     cv_metrics = pd.DataFrame(cv_rows)
     cv_metrics.to_csv(
-        OUTPUT_DIR / "metrik_kfold_per_fold.csv",
+        OUTPUT_DIR / "hasil_cv_per_fold.csv",
         index=False,
         encoding="utf-8-sig",
     )
     cv_summary = cv_metrics[["MAE", "RMSE", "R2"]].agg(["mean", "std"])
     cv_summary.index.name = "statistic"
     cv_summary.to_csv(
-        OUTPUT_DIR / "metrik_kfold_ringkasan.csv",
+        OUTPUT_DIR / "hasil_cv_ringkasan.csv",
         encoding="utf-8-sig",
     )
 
-    prediction_rows = []
-    for split_name, split_indices, actual_values, predicted_values in (
-        ("train", train_indices, y_train, train_prediction),
-        ("test", test_indices, y_test, test_prediction),
-    ):
-        for row_index, actual, predicted in zip(
-            split_indices, actual_values, predicted_values
-        ):
-            source_row = data.iloc[row_index]
-
-            prediction_rows.append({
-                "image_path": source_row[IMAGE_COLUMN_FEATURES],
-                "split": split_name,
-                "R_mean": X[row_index, 0],
-                "G_mean": X[row_index, 1],
-                "B_mean": X[row_index, 2],
-                "R_std": X[row_index, 3],
-                "G_std": X[row_index, 4],
-                "B_std": X[row_index, 5],
-                "actual_density_cells_per_mL": actual,
-                "predicted_density_cells_per_mL": predicted,
-                "residual_actual_minus_predicted": actual - predicted,
-            })
-
-    pd.DataFrame(prediction_rows).to_csv(
-        OUTPUT_DIR / "prediksi_train_test.csv",
+    test_predictions = pd.DataFrame({
+        "nama_file": data.iloc[test_indices][IMAGE_COLUMN_FEATURES].to_numpy(),
+        "actual": y_test,
+        "predicted": test_prediction,
+        "residual": y_test - test_prediction,
+    })
+    test_predictions.to_csv(
+        OUTPUT_DIR / "prediksi_test_semua_model.csv",
         index=False,
         encoding="utf-8-sig",
     )
@@ -232,29 +214,24 @@ def main() -> None:
         encoding="utf-8-sig",
     )
 
-    metrics = {
-        "cv_n_splits": N_SPLITS,
-        "cv_MAE_mean": cv_metrics["MAE"].mean(),
-        "cv_MAE_std": cv_metrics["MAE"].std(),
-        "cv_RMSE_mean": cv_metrics["RMSE"].mean(),
-        "cv_RMSE_std": cv_metrics["RMSE"].std(),
-        "cv_R2_mean": cv_metrics["R2"].mean(),
-        "cv_R2_std": cv_metrics["R2"].std(),
-        "train_MAE": mean_absolute_error(y_train, train_prediction),
-        "train_RMSE": np.sqrt(mean_squared_error(y_train, train_prediction)),
-        "train_R2": r2_score(y_train, train_prediction),
-        "test_MAE": mean_absolute_error(y_test, test_prediction),
-        "test_RMSE": np.sqrt(mean_squared_error(y_test, test_prediction)),
-        "test_R2": r2_score(y_test, test_prediction),
-        "n_samples": len(data),
-        "n_train": len(train_indices),
-        "n_test": len(test_indices),
-        "target": TARGET_COLUMN,
-        "input_features": ", ".join(INPUT_FEATURES),
-    }
-
-    pd.DataFrame([metrics]).to_csv(
-        OUTPUT_DIR / "metrik_model.csv",
+    train_test_metrics = pd.DataFrame([
+        {
+            "Model": "Regresi Polinomial Orde 2",
+            "Data": "Train",
+            "MAE": mean_absolute_error(y_train, train_prediction),
+            "RMSE": np.sqrt(mean_squared_error(y_train, train_prediction)),
+            "R2": r2_score(y_train, train_prediction),
+        },
+        {
+            "Model": "Regresi Polinomial Orde 2",
+            "Data": "Test",
+            "MAE": mean_absolute_error(y_test, test_prediction),
+            "RMSE": np.sqrt(mean_squared_error(y_test, test_prediction)),
+            "R2": r2_score(y_test, test_prediction),
+        },
+    ])
+    train_test_metrics.to_csv(
+        OUTPUT_DIR / "hasil_evaluasi_train_test_semua_model.csv",
         index=False,
         encoding="utf-8-sig",
     )
@@ -269,20 +246,21 @@ def main() -> None:
         f"(train={len(train_indices)}, test={len(test_indices)})"
     )
     print(
-        f"5-fold CV (train saja) MAE: {metrics['cv_MAE_mean']:.6g} "
-        f"± {metrics['cv_MAE_std']:.6g}"
+        f"5-fold CV (train saja) MAE: {cv_metrics['MAE'].mean():.6g} "
+        f"± {cv_metrics['MAE'].std():.6g}"
     )
     print(
-        f"5-fold CV (train saja) RMSE: {metrics['cv_RMSE_mean']:.6g} "
-        f"± {metrics['cv_RMSE_std']:.6g}"
+        f"5-fold CV (train saja) RMSE: {cv_metrics['RMSE'].mean():.6g} "
+        f"± {cv_metrics['RMSE'].std():.6g}"
     )
     print(
-        f"5-fold CV (train saja) R²: {metrics['cv_R2_mean']:.6g} "
-        f"± {metrics['cv_R2_std']:.6g}"
+        f"5-fold CV (train saja) R²: {cv_metrics['R2'].mean():.6g} "
+        f"± {cv_metrics['R2'].std():.6g}"
     )
-    print(f"Test MAE: {metrics['test_MAE']:.6g}")
-    print(f"Test RMSE: {metrics['test_RMSE']:.6g}")
-    print(f"Test R²: {metrics['test_R2']:.6g}")
+    test_row = train_test_metrics[train_test_metrics["Data"] == "Test"].iloc[0]
+    print(f"Test MAE: {test_row['MAE']:.6g}")
+    print(f"Test RMSE: {test_row['RMSE']:.6g}")
+    print(f"Test R²: {test_row['R2']:.6g}")
     print(f"Hasil tersimpan di: {OUTPUT_DIR}")
 
 

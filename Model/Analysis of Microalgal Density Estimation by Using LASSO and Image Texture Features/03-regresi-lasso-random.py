@@ -5,6 +5,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
+from sklearn.compose import TransformedTargetRegressor
 from sklearn.linear_model import Lasso, LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import KFold, train_test_split
@@ -53,8 +54,9 @@ TEST_RATIO = 0.20
 N_SPLITS = 5
 RANDOM_STATE = 42
 
-# alpha=0 sebagai baseline regresi linear, serta grid alpha LASSO yang
-# mencakup nilai 0.001 yang dilaporkan sebagai optimum pada paper.
+# Alpha diuji pada target yang distandardisasi di dalam setiap fit. Kandidat
+# 0.001 tetap dimasukkan, tetapi interpretasinya hanya sebanding dengan paper
+# jika paper juga menstandardisasi target dengan cara yang sama.
 ALPHA_VALUES = np.concatenate(([0.0], np.geomspace(1e-3, 10.0, 99)))
 ALPHA_VALUES = np.unique(np.append(ALPHA_VALUES, 1e-3))
 CV_FOLD_COUNTS = (5, 10, 20)
@@ -89,17 +91,28 @@ def parse_target(values: pd.Series) -> np.ndarray:
     return pd.to_numeric(text, errors="coerce").to_numpy(dtype=np.float64)
 
 
-def make_estimator(alpha: float) -> Pipeline:
-    """Normalisasi fitur dilakukan hanya berdasarkan data yang di-fit."""
+def make_estimator(alpha: float) -> TransformedTargetRegressor:
+    """Skalakan X dan y hanya dari data fit; prediksi dikembalikan ke unit asli."""
     if np.isclose(alpha, 0.0):
         regressor = LinearRegression()
     else:
-        regressor = Lasso(alpha=float(alpha), max_iter=100_000, tol=1e-7)
+        # Toleransi 1e-7 terlalu ketat untuk target berskala besar dan fitur
+        # yang saling berkorelasi; beri ruang iterasi lebih banyak agar solver
+        # coordinate descent dapat mencapai konvergensi.
+        regressor = Lasso(
+            alpha=float(alpha),
+            max_iter=500_000,
+            tol=1e-5,
+        )
 
-    return Pipeline([
+    feature_pipeline = Pipeline([
         ("scaler", StandardScaler()),
         ("model", regressor),
     ])
+    return TransformedTargetRegressor(
+        regressor=feature_pipeline,
+        transformer=StandardScaler(),
+    )
 
 
 def calculate_metrics(actual: np.ndarray, predicted: np.ndarray) -> dict:

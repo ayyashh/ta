@@ -6,3 +6,5 @@ Dataset
 Data Kultivasi Mikroalga K1-16
 Model/Analysis of Microalgal Density Estimation by Using LASSO and Image Texture Features/cropped_roi_50x50
 Model/Convolutional neural network regression for low-cost microalgal density estimation/CNN_Moving_Window
+*.joblib
+*.pth
