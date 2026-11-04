@@ -1,0 +1,9 @@
+﻿Model,Data,jumlah_fitur,n_sampel,MAE,RMSE,R2,parameter_terbaik
+DTS,Train,768,202,377938.6739142813,624856.8967539702,0.6810970591922967,"{'max_depth': 5, 'min_samples_leaf': 4}"
+DTS,Test,768,51,500137.75465160265,702343.7635795538,0.23528193214615378,"{'max_depth': 5, 'min_samples_leaf': 4}"
+RF,Train,768,202,255580.13796772793,635549.8720418959,0.6700891033475183,"{'max_depth': None, 'max_features': 1.0, 'min_samples_leaf': 4, 'n_estimators': 200}"
+RF,Test,768,51,460517.0704693079,600391.0479203091,0.4411821030677372,"{'max_depth': None, 'max_features': 1.0, 'min_samples_leaf': 4, 'n_estimators': 200}"
+GBM,Train,768,202,9590.090042307955,11373.86522941487,0.9998943392851116,"{'learning_rate': 0.1, 'max_depth': 3, 'min_samples_leaf': 3, 'n_estimators': 200}"
+GBM,Test,768,51,468644.3654811018,645189.0021511031,0.3546789942522758,"{'learning_rate': 0.1, 'max_depth': 3, 'min_samples_leaf': 3, 'n_estimators': 200}"
+k-NN,Train,768,202,331.8762376237624,1306.4536827792729,0.999998605927296,"{'model__n_neighbors': 3, 'model__p': 1, 'model__weights': 'distance'}"
+k-NN,Test,768,51,495157.55910035816,740378.1918134236,0.15021487218120677,"{'model__n_neighbors': 3, 'model__p': 1, 'model__weights': 'distance'}"

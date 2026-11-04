@@ -1,0 +1,5 @@
+﻿model,cv_MAE,test_MAE,test_RMSE,test_R2,best_params
+RF,860898.6734107187,994820.4033598686,1940860.929930037,0.04479506461745408,"{'max_depth': None, 'max_features': 0.5, 'min_samples_leaf': 4, 'n_estimators': 500}"
+k-NN,865826.0383002097,1115997.2353626878,2065781.580689035,-0.08212274110088358,"{'model__n_neighbors': 5, 'model__p': 2, 'model__weights': 'distance'}"
+GBM,895248.922140909,1008247.5889677136,1989201.7456913223,-0.0033798744256015034,"{'learning_rate': 0.1, 'max_depth': 3, 'min_samples_leaf': 3, 'n_estimators': 100}"
+DTS,1040842.9358134626,1202331.114601201,2033893.0937909007,-0.048972168820643036,"{'max_depth': 3, 'min_samples_leaf': 4}"

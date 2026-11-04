@@ -1,6 +1,7 @@
 """Train four regressors using RGB histogram features and biomass labels."""
 
 from pathlib import Path
+import re
 
 import joblib
 import numpy as np
@@ -27,6 +28,44 @@ TEST_SIZE = 0.20
 N_SPLITS = 5
 N_QUANTILE_BINS = 5
 RANDOM_STATE = 42
+
+
+def image_key(value) -> str:
+    """Buat kunci gambar dari nama dasar tanpa folder atau ekstensi."""
+    normalized = str(value).replace("\\", "/").strip()
+    return Path(normalized).stem.casefold()
+
+
+def parse_numeric_target(value) -> float:
+    """Parse angka target dengan format Indonesia atau internasional."""
+    if pd.isna(value):
+        return np.nan
+
+    text = str(value).strip().replace(" ", "").replace("\u00a0", "")
+    if not text:
+        return np.nan
+
+    has_comma = "," in text
+    has_dot = "." in text
+
+    if has_comma and has_dot:
+        # Separator terakhir dianggap desimal: 425.584,73 atau 425,584.73.
+        if text.rfind(",") > text.rfind("."):
+            text = text.replace(".", "").replace(",", ".")
+        else:
+            text = text.replace(",", "")
+    elif has_comma:
+        if re.fullmatch(r"[+-]?\d{1,3}(?:,\d{3})+", text):
+            text = text.replace(",", "")
+        else:
+            text = text.replace(",", ".")
+    elif has_dot and re.fullmatch(r"[+-]?\d{1,3}(?:\.\d{3})+", text):
+        text = text.replace(".", "")
+
+    try:
+        return float(text)
+    except ValueError:
+        return np.nan
 
 
 def make_quantile_bins(target: np.ndarray) -> np.ndarray:
@@ -60,7 +99,11 @@ def main() -> None:
         raise FileNotFoundError(f"File label tidak ditemukan: {LABELS_CSV}")
 
     features = pd.read_csv(FEATURES_CSV, encoding="utf-8-sig")
-    labels = pd.read_csv(LABELS_CSV, encoding="utf-8-sig")
+    labels = pd.read_csv(
+        LABELS_CSV,
+        encoding="utf-8-sig",
+        dtype={TARGET_COLUMN: "string"},
+    )
     required_features = {IMAGE_COLUMN_FEATURES}
     required_labels = {IMAGE_COLUMN_LABELS, TARGET_COLUMN}
     if not required_features.issubset(features.columns):
@@ -73,27 +116,55 @@ def main() -> None:
     if set(feature_columns) != expected_columns:
         raise ValueError("Kolom fitur harus berupa histogram RGB 256 bin per kanal (768 fitur).")
 
-    # Samakan key berdasarkan nama file agar label dapat dicocokkan dengan
-    # feature path yang mungkin memiliki subfolder.
-    features["_key"] = features[IMAGE_COLUMN_FEATURES].map(lambda value: Path(str(value)).name.lower())
-    labels["_key"] = labels[IMAGE_COLUMN_LABELS].map(lambda value: Path(str(value)).name.lower())
+    # Cocokkan nama dasar gambar saja. Ekstensi .jpg/.png dan subfolder
+    # boleh berbeda antara CSV fitur dan CSV label.
+    features["_key"] = features[IMAGE_COLUMN_FEATURES].map(image_key)
+    labels["_key"] = labels[IMAGE_COLUMN_LABELS].map(image_key)
     if features["_key"].duplicated().any():
         raise ValueError("Ada nama gambar duplikat pada fitur histogram.")
     if labels["_key"].duplicated().any():
         raise ValueError("Ada nama gambar duplikat pada file label.")
 
+    labels["_target_numeric"] = labels[TARGET_COLUMN].map(parse_numeric_target)
     data = features.merge(
-        labels[["_key", TARGET_COLUMN]], on="_key", how="inner", validate="one_to_one"
+        labels[["_key", TARGET_COLUMN, "_target_numeric"]],
+        on="_key",
+        how="inner",
+        validate="one_to_one",
     )
     if data.empty:
         raise ValueError("Tidak ada nama gambar yang cocok antara fitur dan label.")
     print(f"Gambar dengan fitur dan label cocok: {len(data)}")
     print(f"Gambar fitur tanpa label: {len(features) - len(data)}")
 
-    X = data[feature_columns].to_numpy(dtype=np.float32)
-    y = pd.to_numeric(data[TARGET_COLUMN], errors="coerce").to_numpy(dtype=np.float64)
-    if not np.isfinite(X).all() or not np.isfinite(y).all():
-        raise ValueError("Fitur atau target mengandung nilai kosong/tidak valid.")
+    X_frame = data[feature_columns].apply(pd.to_numeric, errors="coerce")
+    X = X_frame.to_numpy(dtype=np.float64)
+    y = pd.to_numeric(data["_target_numeric"], errors="coerce").to_numpy(
+        dtype=np.float64
+    )
+    invalid_feature_count = int((~np.isfinite(X)).sum())
+    invalid_target_mask = ~np.isfinite(y)
+    if invalid_feature_count or invalid_target_mask.any():
+        invalid_columns = [
+            column
+            for column in feature_columns
+            if not np.isfinite(X_frame[column].to_numpy(dtype=np.float64)).all()
+        ]
+        invalid_target_examples = (
+            data.loc[invalid_target_mask, TARGET_COLUMN]
+            .astype("string")
+            .head(10)
+            .tolist()
+        )
+        raise ValueError(
+            "Ditemukan nilai kosong/tidak valid setelah fitur dan target digabung. "
+            f"Nilai fitur tidak valid: {invalid_feature_count} "
+            f"(kolom: {invalid_columns[:10]}). "
+            f"Target tidak valid: {int(invalid_target_mask.sum())} "
+            f"(contoh nilai asli: {invalid_target_examples})."
+        )
+
+    X = X.astype(np.float32)
     if len(y) < N_SPLITS + 2:
         raise ValueError("Sampel tidak cukup untuk split train/test dan CV 5-fold.")
 

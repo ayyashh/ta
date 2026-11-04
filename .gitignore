@@ -15,4 +15,4 @@ Model/Analysis of Microalgal Density Estimation by Using LASSO and Image Texture
 Model/Cost-effective wireless system for image-based microalgae biomass estimation with adaptive background correction/fitur_rgb_sampel.csv
 Model/Real-Time Algal Monitoring Using Novel Machine Learning Approaches/fitur_histogram_rgb.csv
 patches/
-Model\Convolutional neural network regression for low-cost microalgal density estimation\cnn_moving_window_biomass\patches\train\0001_K10_obsbot_photo_20260415_150013_1920x1080_y0000_x0020.png
+preprocessed_images/
