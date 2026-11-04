@@ -7,12 +7,10 @@ import cv2
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-
-KAGGLE_INPUT = Path("/kaggle/input")
-IMAGE_FOLDER_NAME = Path(r"D:/00 Kuliah/TA/Experiment/Dataset/Data Gambar/gambar_terpilih")
-LABELS_FILENAME = Path(r"D:\00 Kuliah\TA\Experiment\Dataset\Data Sensor Kultivasi\csv\gabungan_dengan_jumlah_sel.csv")
+IMAGE_DIR = Path(r"D:\00 Kuliah\TA\Experiment\Dataset\Data Gambar\Gambar Final")
+LABELS_CSV = Path(r"D:\00 Kuliah\TA\Experiment\Dataset\Data Sensor Kultivasi\csv\Biomass\gabungan_dengan_jumlah_sel_dari_biomassa.csv")
 IMAGE_COLUMN = "Nama_Gambar"
-TARGET_COLUMN = "Jumlah Sel (sel/mL)"
+TARGET_COLUMN = "Jumlah Sel dari Biomass (sel/mL)"
 
 WINDOW_SIZE = 32
 STRIDE = 20
@@ -21,6 +19,10 @@ TEST_RATIO = 0.20
 SEED = 42
 
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".tif", ".tiff"}
+
+OUTPUT_DIR = Path(r"D:\00 Kuliah\TA\Experiment\Model\Convolutional neural network regression for low-cost microalgal density estimation\biomass\CNN_Moving_Window")
+PATCH_DIR = Path(r"D:\00 Kuliah\TA\Experiment\Model\Convolutional neural network regression for low-cost microalgal density estimation\biomass\patches")
+MANIFEST_PATH = Path(r"D:\00 Kuliah\TA\Experiment\Model\Convolutional neural network regression for low-cost microalgal density estimation\biomass\moving_window_manifest.csv")
 
 
 def image_key(value):
@@ -35,35 +37,6 @@ def parse_target(value):
         text = text.replace(".", "").replace(",", "")
     return float(text)
 
-
-if KAGGLE_INPUT.is_dir():
-    image_dirs = [
-        path for path in KAGGLE_INPUT.rglob(IMAGE_FOLDER_NAME.name)
-        if path.is_dir()
-    ]
-    label_files = list(KAGGLE_INPUT.rglob(LABELS_FILENAME.name))
-
-    if len(image_dirs) != 1:
-        raise FileNotFoundError(
-            f"Harus ditemukan tepat satu folder {IMAGE_FOLDER_NAME.name}; "
-            f"ditemukan {len(image_dirs)}."
-        )
-    if len(label_files) != 1:
-        raise FileNotFoundError(
-            f"Harus ditemukan tepat satu file {LABELS_FILENAME.name}; "
-            f"ditemukan {len(label_files)}."
-        )
-
-    IMAGE_DIR = image_dirs[0]
-    LABELS_CSV = label_files[0]
-    OUTPUT_DIR = Path("/kaggle/working/CNN_Moving_Window")
-else:
-    IMAGE_DIR = IMAGE_FOLDER_NAME
-    LABELS_CSV = LABELS_FILENAME
-    OUTPUT_DIR = Path(__file__).resolve().parent / "CNN_Moving_Window"
-
-PATCH_DIR = OUTPUT_DIR / "patches"
-MANIFEST_PATH = OUTPUT_DIR / "moving_window_manifest.csv"
 
 if not IMAGE_DIR.is_dir():
     raise FileNotFoundError(f"Folder gambar tidak ditemukan: {IMAGE_DIR}")

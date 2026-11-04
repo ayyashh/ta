@@ -1,0 +1,2 @@
+﻿Pendekatan,"CV MAE (mean ± SD, 5-fold)",Train 80% MAE,Test 20% MAE,"CV RMSE (mean ± SD, 5-fold)",Train 80% RMSE,Test 20% RMSE,"CV R2 (mean ± SD, 5-fold)",Train 80% R2,Test 20% R2
+Regresi Polinomial Orde 2,"684,752 ± 130,491","474,250","575,813","1,289,057 ± 737,999","918,993","801,699",-0.443 ± 0.851,0.318,-0.079

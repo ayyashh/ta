@@ -1,0 +1,2 @@
+﻿Model,"CV MAE (mean ± SD, 5-fold)",Train 80% MAE,Test 20% MAE,"CV RMSE (mean ± SD, 5-fold)",Train 80% RMSE,Test 20% RMSE,"CV R2 (mean ± SD, 5-fold)",Train 80% R2,Test 20% R2
+Deep CNN 29 Layers (MSE),"112,228 ± 12,315","68,330","104,857","143,330 ± 8,823","99,968","144,619",0.643 ± 0.047,0.831,0.527

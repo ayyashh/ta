@@ -6,6 +6,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
+from sklearn.base import clone
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV, StratifiedKFold, train_test_split
 from sklearn.neighbors import KNeighborsRegressor
@@ -153,14 +154,19 @@ def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     results = []
     prediction_rows = []
+    test_prediction_rows = []
+    cv_fold_rows = []
+    train_test_metric_rows = []
     cv_result_frames = []
+    cv_splits = list(cv.split(X_train, train_strata))
+
     for model_name, (estimator, parameter_grid) in models.items():
         print(f"Grid search untuk {model_name}...")
         search = GridSearchCV(
             estimator=estimator,
             param_grid=parameter_grid,
             scoring="neg_mean_absolute_error",
-            cv=list(cv.split(X_train, train_strata)),
+            cv=cv_splits,
             n_jobs=-1,
             refit=True,
             error_score="raise",
@@ -168,6 +174,32 @@ def main() -> None:
         search.fit(X_train, y_train)
         train_prediction = search.best_estimator_.predict(X_train)
         test_prediction = search.best_estimator_.predict(X_test)
+
+        # Evaluasi parameter terbaik pada setiap fold, dengan fold yang sama
+        # seperti GridSearchCV. Jumlah fitur tetap 768 histogram RGB.
+        for fold_number, (fit_indices, validation_indices) in enumerate(
+            cv_splits, start=1
+        ):
+            fold_estimator = clone(estimator).set_params(**search.best_params_)
+            fold_estimator.fit(X_train[fit_indices], y_train[fit_indices])
+            validation_prediction = fold_estimator.predict(
+                X_train[validation_indices]
+            )
+            y_validation = y_train[validation_indices]
+            cv_fold_rows.append({
+                "Model": model_name,
+                "jumlah_fitur": len(feature_columns),
+                "Fold": fold_number,
+                "n_train": len(fit_indices),
+                "n_validation": len(validation_indices),
+                "MAE": mean_absolute_error(y_validation, validation_prediction),
+                "RMSE": np.sqrt(
+                    mean_squared_error(y_validation, validation_prediction)
+                ),
+                "R2": r2_score(y_validation, validation_prediction),
+                "parameter_terbaik": str(search.best_params_),
+            })
+
         results.append({
             "model": model_name,
             "cv_MAE": -search.best_score_,
@@ -177,6 +209,21 @@ def main() -> None:
             "best_params": str(search.best_params_),
         })
 
+        for split_name, actual, predicted in (
+            ("Train", y_train, train_prediction),
+            ("Test", y_test, test_prediction),
+        ):
+            train_test_metric_rows.append({
+                "Model": model_name,
+                "Data": split_name,
+                "jumlah_fitur": len(feature_columns),
+                "n_sampel": len(actual),
+                "MAE": mean_absolute_error(actual, predicted),
+                "RMSE": np.sqrt(mean_squared_error(actual, predicted)),
+                "R2": r2_score(actual, predicted),
+                "parameter_terbaik": str(search.best_params_),
+            })
+
         for split_name, split_indices, actual, predicted in (
             ("train", train_indices, y_train, train_prediction),
             ("test", test_indices, y_test, test_prediction),
@@ -184,14 +231,23 @@ def main() -> None:
             for image_path, actual_value, predicted_value in zip(
                 data[IMAGE_COLUMN_FEATURES].iloc[split_indices], actual, predicted
             ):
-                prediction_rows.append({
+                prediction_row = {
                     "model": model_name,
                     "split": split_name,
                     "image_path": image_path,
                     "actual_density_cells_per_mL": actual_value,
                     "predicted_density_cells_per_mL": predicted_value,
                     "residual_actual_minus_predicted": actual_value - predicted_value,
-                })
+                }
+                prediction_rows.append(prediction_row)
+                if split_name == "test":
+                    test_prediction_rows.append({
+                        "Model": model_name,
+                        "image_path": image_path,
+                        "actual_density_cells_per_mL": actual_value,
+                        "predicted_density_cells_per_mL": predicted_value,
+                        "residual_actual_minus_predicted": actual_value - predicted_value,
+                    })
 
         cv_results = pd.DataFrame(search.cv_results_)
         cv_results.insert(0, "model", model_name)
@@ -201,6 +257,45 @@ def main() -> None:
         print(f"  Parameter terbaik: {search.best_params_}")
 
     results_df = pd.DataFrame(results).sort_values("cv_MAE")
+    cv_fold_df = pd.DataFrame(cv_fold_rows)
+    cv_summary_df = (
+        cv_fold_df.groupby("Model", as_index=False)
+        .agg(
+            jumlah_fitur=("jumlah_fitur", "first"),
+            n_fold=("Fold", "nunique"),
+            MAE_mean=("MAE", "mean"),
+            MAE_std=("MAE", "std"),
+            RMSE_mean=("RMSE", "mean"),
+            RMSE_std=("RMSE", "std"),
+            R2_mean=("R2", "mean"),
+            R2_std=("R2", "std"),
+        )
+    )
+    cv_summary_df = cv_summary_df.merge(
+        results_df[["model", "best_params"]],
+        left_on="Model",
+        right_on="model",
+        how="left",
+    ).drop(columns="model")
+
+    cv_fold_df.to_csv(
+        OUTPUT_DIR / "hasil_cv_per_fold.csv", index=False, encoding="utf-8-sig"
+    )
+    cv_summary_df.to_csv(
+        OUTPUT_DIR / "hasil_cv_ringkasan.csv", index=False, encoding="utf-8-sig"
+    )
+    pd.DataFrame(train_test_metric_rows).to_csv(
+        OUTPUT_DIR / "hasil_evaluasi_train_test_semua_model.csv",
+        index=False,
+        encoding="utf-8-sig",
+    )
+    pd.DataFrame(test_prediction_rows).to_csv(
+        OUTPUT_DIR / "prediksi_test_semua_model.csv",
+        index=False,
+        encoding="utf-8-sig",
+    )
+
+    # File lama tetap ditulis agar skrip visualisasi 04 masih dapat digunakan.
     results_df.to_csv(OUTPUT_DIR / "ringkasan_hasil.csv", index=False, encoding="utf-8-sig")
     pd.DataFrame(prediction_rows).to_csv(
         OUTPUT_DIR / "prediksi_train_test.csv", index=False, encoding="utf-8-sig"

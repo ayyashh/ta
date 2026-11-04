@@ -2,7 +2,6 @@
 
 from pathlib import Path
 import gc
-from zipfile import BadZipFile, ZipFile
 
 import cv2
 import numpy as np
@@ -15,12 +14,21 @@ from tensorflow.keras import layers
 
 
 # ============================================================
-# 1. Konfigurasi dan deteksi GPU
+# 1. Konfigurasi data lokal dan deteksi GPU
 # ============================================================
 
-KAGGLE_INPUT = Path("/kaggle/input")
-KAGGLE_WORKING = Path("/kaggle/working")
-IS_KAGGLE = KAGGLE_INPUT.is_dir()
+SCRIPT_DIR = Path(__file__).resolve().parent
+
+# INPUT: folder yang dibuat oleh 01-moving-window-dan-split.py.
+# Manifest ditunjuk melalui path lengkap lokal, bukan dicari otomatis
+# berdasarkan nama file di banyak folder.
+MOVING_WINDOW_DIR = SCRIPT_DIR / "CNN_Moving_Window"
+MANIFEST_PATH = MOVING_WINDOW_DIR / "moving_window_manifest.csv"
+INPUT_DATA_DIR = MOVING_WINDOW_DIR
+
+# OUTPUT: hanya CSV laporan dan model terlatih disimpan di sini.
+# Patch dan manifest tetap berada di MOVING_WINDOW_DIR sebagai input.
+RESULTS_ROOT = SCRIPT_DIR / "hasil"
 
 SEED = 42
 WINDOW_SIZE = 32
@@ -35,7 +43,6 @@ if LOSS_NAME not in {"mse", "mae", "huber"}:
     raise ValueError("LOSS_NAME harus 'mse', 'mae', atau 'huber'.")
 
 MODEL_NAME = f"Deep CNN 29 Layers ({LOSS_NAME.upper()})"
-MANIFEST_FILENAME = "moving_window_manifest.csv"
 
 physical_gpus = tf.config.list_physical_devices("GPU")
 
@@ -55,92 +62,19 @@ else:
     print("GPU tidak terdeteksi oleh TensorFlow; model akan memakai CPU.")
 
 
-# ============================================================
-# 2. Tentukan lokasi input dan output
-# ============================================================
-
-if IS_KAGGLE:
-    # Input selalu berasal dari dataset yang dipasang di /kaggle/input.
-    # Working hanya dipakai untuk hasil model dan ekstraksi ZIP sementara.
-    OUTPUT_DIR = KAGGLE_WORKING / "CNN_Moving_Window"
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-    input_manifests = list(KAGGLE_INPUT.rglob(MANIFEST_FILENAME))
-
-    if len(input_manifests) == 1:
-        MANIFEST_PATH = input_manifests[0]
-        INPUT_DATA_DIR = MANIFEST_PATH.parent
-    elif len(input_manifests) > 1:
-        raise FileNotFoundError(
-            f"Pasang tepat satu dataset yang berisi {MANIFEST_FILENAME}; "
-            f"ditemukan {len(input_manifests)} manifest di {KAGGLE_INPUT}."
-        )
-    else:
-        # Jika Kaggle Dataset berisi ZIP, ekstrak satu arsip yang memuat manifest.
-        matching_archives = []
-        for archive_path in KAGGLE_INPUT.rglob("*.zip"):
-            try:
-                with ZipFile(archive_path) as archive:
-                    manifest_members = [
-                        name for name in archive.namelist()
-                        if Path(name).name == MANIFEST_FILENAME
-                    ]
-                    if manifest_members:
-                        matching_archives.append(archive_path)
-            except BadZipFile:
-                continue
-
-        if len(matching_archives) != 1:
-            raise FileNotFoundError(
-                f"Tidak ditemukan satu dataset unik dengan {MANIFEST_FILENAME} "
-                f"di {KAGGLE_INPUT}; manifest langsung={len(input_manifests)}, "
-                f"arsip cocok={len(matching_archives)}."
-            )
-
-        extracted_input_dir = OUTPUT_DIR / "input_dataset"
-        extracted_input_dir.mkdir(parents=True, exist_ok=True)
-        with ZipFile(matching_archives[0]) as archive:
-            root = extracted_input_dir.resolve()
-            for member in archive.infolist():
-                destination = (root / member.filename).resolve()
-                if destination != root and root not in destination.parents:
-                    raise ValueError(
-                        f"Path tidak aman di dalam arsip: {member.filename}"
-                    )
-            archive.extractall(root)
-
-        extracted_manifests = list(
-            extracted_input_dir.rglob(MANIFEST_FILENAME)
-        )
-        if len(extracted_manifests) != 1:
-            raise FileNotFoundError(
-                "Arsip dataset harus berisi tepat satu "
-                f"{MANIFEST_FILENAME}; ditemukan {len(extracted_manifests)}."
-            )
-        MANIFEST_PATH = extracted_manifests[0]
-        INPUT_DATA_DIR = MANIFEST_PATH.parent
-
-else:
-    # Saat lokal, Kode 1 menyimpan manifest dan patch di folder ini.
-    SCRIPT_DIR = Path(__file__).resolve().parent
-    INPUT_DATA_DIR = SCRIPT_DIR / "CNN_Moving_Window"
-    OUTPUT_DIR = INPUT_DATA_DIR
-    MANIFEST_PATH = INPUT_DATA_DIR / MANIFEST_FILENAME
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-
 if not MANIFEST_PATH.is_file():
     raise FileNotFoundError(
-        f"Manifest tidak ditemukan: {MANIFEST_PATH}. Jalankan Kode 1 terlebih dahulu."
+        f"Manifest moving-window tidak ditemukan pada path input yang ditentukan:\n"
+        f"{MANIFEST_PATH}\nJalankan 01-moving-window-dan-split.py terlebih dahulu."
     )
 
-OUTPUT_DIR = OUTPUT_DIR / f"loss_{LOSS_NAME}"
+OUTPUT_DIR = RESULTS_ROOT / f"loss_{LOSS_NAME}"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-print(f"Mode: {'Kaggle' if IS_KAGGLE else 'Lokal'}")
-print(f"Manifest input: {MANIFEST_PATH}")
-print(f"Folder patch input: {INPUT_DATA_DIR}")
-print(f"Folder output: {OUTPUT_DIR}")
+print("Mode: lokal")
+print(f"Path manifest input: {MANIFEST_PATH}")
+print(f"Folder gambar patch input: {INPUT_DATA_DIR / 'patches'}")
+print(f"Folder output CSV dan model: {OUTPUT_DIR}")
 print(f"Perangkat training: {TF_DEVICE}")
 
 manifest = pd.read_csv(MANIFEST_PATH, encoding="utf-8-sig")
@@ -636,19 +570,19 @@ final_metrics_df.to_csv(
 final_metrics_df[final_metrics_df["Data"] == "Test"][
     ["Model", "MAE", "RMSE", "R2"]
 ].to_csv(
-    OUTPUT_DIR / "dl_test_metrics_all_models.csv",
+    OUTPUT_DIR / "dl_test_metrics_model.csv",
     index=False,
     encoding="utf-8-sig",
 )
 
 # Satu baris per gambar test; nilai prediksi sudah dirata-ratakan dari patch.
 test_report_df = test_predictions.rename(columns={
-    "predicted": "predicted_deep_cnn_29_layers",
-    "residual": "residual_deep_cnn_29_layers",
+    "predicted": "predicted_model",
+    "residual": "residual_model",
 })
 
 test_report_df.to_csv(
-    OUTPUT_DIR / "dl_test_predictions_all_models.csv",
+    OUTPUT_DIR / "dl_test_predictions_model.csv",
     index=False,
     encoding="utf-8-sig",
 )
@@ -686,7 +620,7 @@ print("\nFile utama:")
 print(f"- CV per fold: {OUTPUT_DIR / 'dl_cv_metrics_per_fold.csv'}")
 print(f"- Ringkasan CV: {OUTPUT_DIR / 'dl_cv_model_summary.csv'}")
 print(f"- Metrik final: {OUTPUT_DIR / 'dl_final_metrics_train_test.csv'}")
-print(f"- Prediksi test: {OUTPUT_DIR / 'dl_test_predictions_all_models.csv'}")
+print(f"- Prediksi test: {OUTPUT_DIR / 'dl_test_predictions_model.csv'}")
 print(f"- Model final: {model_path}")
 
 if physical_gpus:
